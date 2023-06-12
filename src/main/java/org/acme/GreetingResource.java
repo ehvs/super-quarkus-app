@@ -4,13 +4,20 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.inject.Inject;
 
-@Path("/hello-resteasy")
-public class GreetingResource {
+import io.micrometer.core.instrument.MeterRegistry;
+
+@Path("/hello")
+public class GreetingsResource {
+
+    @Inject
+    MeterRegistry registry;
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello RESTEasy";
+    public String sayHello() {
+        registry.counter("greeting_counter").increment();
+
+        return "Hello!";
     }
 }
